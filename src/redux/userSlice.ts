@@ -5,7 +5,7 @@ interface TUserLogin {
   isLogged: boolean;
 }
 
-export const slice = createSlice({
+export const userSlice = createSlice({
   name: 'user',
   initialState: {
     email: '',
@@ -18,6 +18,6 @@ export const slice = createSlice({
   }
 });
 
-export const { userLogin } = slice.actions;
+export const { userLogin } = userSlice.actions;
 export const selectUser = (state: TUserLogin) => state.email;
-export default slice.reducer;
+export default userSlice.reducer;
