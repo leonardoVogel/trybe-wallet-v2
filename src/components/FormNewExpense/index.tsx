@@ -2,14 +2,15 @@ import { ChangeEvent, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { INITIAL_STATE } from "../../utils/constants";
-import { InputNewExpense } from "../InputNewExpense/InputNewExpense";
-import { currenciesList, fetchCurrencies } from "../../redux/walletSlice";
+import { InputNewExpense } from "../InputNewExpense";
+import { selectCurrenciesList, fetchCurrencies, fetchExchangeRates } from "../../redux/walletSlice";
+import { fullExpenseObjectType } from "../../types";
 
 export function FormNewExpense() {
   const [form, setForm] = useState(INITIAL_STATE);
   const dispatch = useDispatch();
-  const currencies = useSelector(currenciesList)
-  console.log(currencies);
+  const currencies = useSelector(selectCurrenciesList)
+
   useEffect(() => {
     dispatch(fetchCurrencies());
   }, [dispatch])
@@ -21,6 +22,11 @@ export function FormNewExpense() {
 
   const addNewExpense = (event: any) => {
     event.preventDefault();
+ 
+    dispatch(fetchExchangeRates(form))
+    setForm((state: fullExpenseObjectType) => {
+      return ({ ...state, id: state.id + 1, value: '0', description: '' });
+    })
   }
 
   return (

@@ -1,4 +1,4 @@
-import { FormNewExpense } from "../components/FormNewExpense/FormNewExpense";
+import { FormNewExpense } from "../components/FormNewExpense";
 import { Header } from "../components/Header";
 
 export function Wallet() {

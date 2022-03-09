@@ -9,6 +9,42 @@ export interface IInputProps extends InputHTMLAttributes<HTMLSelectElement | HTM
   onInputChange: (e: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void;
 }
 
+export interface TWalletState {
+  currencies: string[];
+  expenses: object[];
+  isLoading: boolean;
+  error: string;
+}
+
+export interface TUserLogin {
+  email: string;
+  isLogged: boolean;
+}
+
+export interface expenseObjectType {
+  id: number;
+  value: string;
+  description: string;
+  currency: string;
+  method: string;
+  tag: string;
+}
+
+export interface exchangeRateType {
+  code: string;
+  ask: string;
+}
+
+export interface fullExpenseObjectType {
+  id: number;
+  value: string;
+  description: string;
+  currency: string;
+  method: string;
+  tag: string;
+  exchangeRates?: exchangeRateType;
+}
+
 export interface stateType {
   user: {
     email: string;
@@ -16,8 +52,8 @@ export interface stateType {
   };
   wallet: {
     currencies: string[];
-    expenses: object[];
+    expenses: fullExpenseObjectType[];
     isLoading: boolean;
-    error: any;
+    error: string;
   };
 }
