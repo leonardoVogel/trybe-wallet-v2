@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 
-import { removeExpense, selectExpensesList } from "../../redux/walletSlice";
-import { FaTrash } from 'react-icons/fa';
+import { removeExpense, editExpense, selectExpensesList } from "../../redux/walletSlice";
+import { FaTrash, FaEdit } from 'react-icons/fa';
+import { ExpensesTablePropsInterface } from "../../types";
 
-export function ExpensesTable() {
+export function ExpensesTable({ setEditMode }: ExpensesTablePropsInterface) {
   const expenses = useSelector(selectExpensesList)
   const dispatch = useDispatch();
 
@@ -46,6 +47,16 @@ export function ExpensesTable() {
                   >
                     <FaTrash />
                   </button>
+                  <button
+                      data-testid="edit-btn"
+                      type="button"
+                      onClick={ () => {
+                        setEditMode(true);
+                        dispatch(editExpense(id));
+                      } }
+                    >
+                      <FaEdit />
+                    </button>
                 </td>
               </tr>);
           })}

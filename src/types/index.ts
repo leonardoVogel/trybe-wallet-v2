@@ -14,6 +14,7 @@ export interface TWalletState {
   expenses: object[];
   isLoading: boolean;
   error: string;
+  expenseToEditId: number;
 }
 
 export interface TUserLogin {
@@ -55,5 +56,15 @@ export interface stateType {
     expenses: fullExpenseObjectType[];
     isLoading: boolean;
     error: string;
+    expenseToEditId: number;
   };
+}
+
+export interface ExpensesTablePropsInterface {
+  setEditMode: Function,
+}
+
+export interface FormNewExpensePropsInterface {
+  editMode: boolean,
+  setEditMode: Function,
 }

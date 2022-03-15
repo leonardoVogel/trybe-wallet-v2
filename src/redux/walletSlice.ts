@@ -30,6 +30,8 @@ export const walletSlice = createSlice({
   initialState: {
     currencies: [],
     expenses: [],
+    currentID: 0,
+    expenseToEditId: 0,
     isLoading: false,
     error: '',
   } as TWalletState,
@@ -44,7 +46,13 @@ export const walletSlice = createSlice({
       return {
         ...state,
         expenses: state.expenses.filter(({ id }: any) => payload !== id),
-      }
+      };
+    },
+    editExpense(state, { payload }) {
+      return { ...state, expenseToEditId: payload };
+    },
+    saveEditExpense(state, { payload }) {
+      return { ...state, expenses: payload };
     }
   },
   extraReducers: (builder) => {
@@ -60,7 +68,8 @@ export const walletSlice = createSlice({
   }
 });
 
-export const { newExpense, isLoading, removeExpense } = walletSlice.actions;
+export const { newExpense, isLoading, removeExpense, editExpense, saveEditExpense } = walletSlice.actions;
 export const selectCurrenciesList = (state: stateType) => state.wallet.currencies;
 export const selectExpensesList = (state: stateType) => state.wallet.expenses;
+export const selectExpensesToEdit = (state: stateType) => state.wallet.expenseToEditId;
 export default walletSlice.reducer;

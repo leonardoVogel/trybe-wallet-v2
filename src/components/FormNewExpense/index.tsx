@@ -3,18 +3,39 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { INITIAL_STATE } from "../../utils/constants";
 import { InputNewExpense } from "../InputNewExpense";
-import { selectCurrenciesList, fetchCurrencies, fetchExchangeRates } from "../../redux/walletSlice";
-import { fullExpenseObjectType } from "../../types";
+import { FormNewExpensePropsInterface, fullExpenseObjectType } from "../../types";
+import {
+  selectCurrenciesList,
+  saveEditExpense,
+  fetchCurrencies,
+  fetchExchangeRates,
+  selectExpensesList,
+  selectExpensesToEdit,
+} from "../../redux/walletSlice";
 
-export function FormNewExpense() {
+export function FormNewExpense({ editMode, setEditMode }: FormNewExpensePropsInterface) {
   const [form, setForm] = useState(INITIAL_STATE);
   const dispatch = useDispatch();
   const currencies = useSelector(selectCurrenciesList)
+  const expenses = useSelector(selectExpensesList);
+  const expensesToEditID = useSelector(selectExpensesToEdit);
 
   useEffect(() => {
     dispatch(fetchCurrencies());
   }, [dispatch])
-  
+
+  useEffect(() => {
+    if (editMode) {
+      expenses.map(({ id }, index) => {
+        if (id === expensesToEditID) {
+          return setForm(expenses[index]);
+        }
+        return '';
+      });
+    } else {
+      setForm((state: fullExpenseObjectType) => ({ ...INITIAL_STATE, id: state.id }));
+    }
+  }, [editMode, expenses, expensesToEditID])
 
   const handleInputChange = ({ target: { id, value } }: ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     setForm((state) => ({ ...state, [id]: value }))
@@ -29,8 +50,23 @@ export function FormNewExpense() {
     })
   }
 
+  const editExpense = (event: any) => {
+    event.preventDefault();
+
+    const newExpenseList = expenses.map((expense: any) => {
+      if (expense.id === form.id) {
+        return form;
+      }
+      return expense;
+    })
+
+    dispatch(saveEditExpense(newExpenseList));
+    setForm(INITIAL_STATE);
+    setEditMode(false);
+  }
+
   return (
-    <form onSubmit={ addNewExpense }>
+    <form onSubmit={ editMode ? editExpense : addNewExpense }>
       <InputNewExpense
           id="value"
           type="number"
@@ -68,7 +104,7 @@ export function FormNewExpense() {
           value={ form.tag }
         />
         <button type="submit">
-          Adicionar despesa
+          { editMode ? 'Editar despesa' : 'Adicionar despesa' }
         </button>
     </form>
   )
