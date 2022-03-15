@@ -1,8 +1,11 @@
-import { useSelector } from "react-redux";
-import { selectExpensesList } from "../../redux/walletSlice";
+import { useDispatch, useSelector } from "react-redux";
+
+import { removeExpense, selectExpensesList } from "../../redux/walletSlice";
+import { FaTrash } from 'react-icons/fa';
 
 export function ExpensesTable() {
   const expenses = useSelector(selectExpensesList)
+  const dispatch = useDispatch();
 
   return (
     <table>
@@ -35,6 +38,15 @@ export function ExpensesTable() {
                 <td>{exchange.toFixed(2)}</td>
                 <td>{(exchange * +value).toFixed(2)}</td>
                 <td>Real</td>
+                <td>
+                  <button
+                    data-testid="delete-btn"
+                    type="button"
+                    onClick={ () => dispatch(removeExpense(id)) }
+                  >
+                    <FaTrash />
+                  </button>
+                </td>
               </tr>);
           })}
       </tbody>

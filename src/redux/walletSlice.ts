@@ -39,6 +39,12 @@ export const walletSlice = createSlice({
     },
     newExpense(state, { payload }) {
       return { ...state, isLoading: false, expenses: [...state.expenses, payload] };
+    },
+    removeExpense(state, { payload }) {
+      return {
+        ...state,
+        expenses: state.expenses.filter(({ id }: any) => payload !== id),
+      }
     }
   },
   extraReducers: (builder) => {
@@ -54,7 +60,7 @@ export const walletSlice = createSlice({
   }
 });
 
-export const { newExpense, isLoading } = walletSlice.actions;
+export const { newExpense, isLoading, removeExpense } = walletSlice.actions;
 export const selectCurrenciesList = (state: stateType) => state.wallet.currencies;
 export const selectExpensesList = (state: stateType) => state.wallet.expenses;
 export default walletSlice.reducer;
